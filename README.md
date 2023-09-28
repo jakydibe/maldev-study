@@ -12,8 +12,8 @@ Il malware funziona cosi':
   3) Rende la memoria allocata eseguibile
   4)Starta un Thread che esegue lo shellcode   (LPTHREAD_START_ROUTINE) exec_mem,
 
-**Per evitare controlli degli AV sono implementati i seguenti metodi:
-**  1) Allocare la memoria prima in Read-Write e poi in Executable, perche' tutto insieme insospettisce gli AV
+Per evitare controlli degli AV sono implementati i seguenti metodi:
+  1) Allocare la memoria prima in Read-Write e poi in Executable, perche' tutto insieme insospettisce gli AV
   2) Il payload lo salviamo XORato, evitando cosi' che l' analisi statica degli AV rilevi un noto payload (meterpreter) e poi lo decriptiamo a runtime
   3) Le 3 funzioni piu' 'sospette' [1)"VirtualAlloc" 2)"VirtualProtect" 3)"RtlMoveMemory"]  non le utilizziamo direttamente per evitare che compaiano nella Import Address Table
      Ma troviamo un puntatore a quelle funzioni con la funzione GetProcAddress() e le chiamiamo usando il puntatore. ----------> Questo metodo e' detto Function Call Obfuscation
