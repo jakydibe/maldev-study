@@ -6,6 +6,8 @@
 
 3) easy_dropper.cpp e' il codice sorgente del malware di test
 
+4) string_xor.py e' uno scriptino che cripta le stringhe che non vogliamo usare in  plaintext nel codice
+
 Il malware funziona cosi': 
   1)Alloca memoria in Read Write
   2) Copia il Payload nella memoria allocata
