@@ -26,7 +26,10 @@ for i in range(len(hex_bytes)):
 
 # Print the result as a hexadecimal string
 
-
-print('payload[] = { 0x' + ', 0x'.join(hex(x)[2:] for x in xored_bytes) + ' };')
+if ("array" in sys.argv[2]):
+	print('payload[] = { 0x' + ', 0x'.join(hex(x)[2:] for x in xored_bytes) + ' };')
+elif ("file" in sys.argv[2]):
+	f = open("encrypted_payload.ico", "wb")
+	f.write(xored_bytes)
 
 #print(xored_bytes)
