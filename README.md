@@ -1,4 +1,6 @@
 # maldev-study
+Checka sto link: https://labs.withsecure.com/publications/bypassing-windows-defender-runtime-scanning
+
 
 1) Compile.bat e' solamente il file per compilare easy_dropper.cpp
    
