@@ -19,6 +19,7 @@ BOOL hook_defender(void);
 BOOL unhook_defender(void);
 HANDLE th = NULL;
 HANDLE th_1 = NULL;
+PVOID func = NULL;
 
 void* exec_mem = NULL;
 DWORD oldprotect = 0;
@@ -38,6 +39,8 @@ HANDLE CreateEventA(
     [in, optional] LPCSTR                lpName
 );*/
 
+
+
 int hook_CreateEventA(LPSECURITY_ATTRIBUTES lpEventAttributes, BOOL  bManualReset, BOOL bInitialState, LPCSTR lpName) {
     printf("\ndentro hook\n");
 
@@ -46,10 +49,14 @@ int hook_CreateEventA(LPSECURITY_ATTRIBUTES lpEventAttributes, BOOL  bManualRese
     VirtualProtect((LPVOID)exec_mem, sizeof(exec_mem), PAGE_NOACCESS, &oldprotect);
     printf("\nDopo SuspendThread()\n");
 
-    Sleep(5000);
+    unhook_defender();
+
+
+    HANDLE hEvent = CreateEventA(lpEventAttributes, bManualReset, bInitialState, lpName);
+
+
     VirtualProtect((LPVOID)exec_mem, sizeof(exec_mem), PAGE_EXECUTE_READ, &oldprotect);
 
-    CreateEventA(lpEventAttributes, bManualReset, bInitialState, lpName);
 
     ResumeThread(th);
 
@@ -67,14 +74,15 @@ BOOL hook_defender(void) {
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
 
-    PVOID func = DetourFindFunction("Kernel32.dll", "CreateEventA");
+    func = DetourFindFunction("Kernel32.dll", "CreateEventA");
 
     DetourAttach(&(PVOID&)func, (PVOID) hook_CreateEventA);
     err = DetourTransactionCommit();
 
 
-    printf("funzione hookata\n");
-        unhook_defender();
+    printf("funzione hookata con risultato %d\n", err);
+
+    Sleep(5000);
 
     return TRUE;
 
@@ -84,13 +92,15 @@ BOOL unhook_defender(void) {
     LONG err;
 
     DetourTransactionBegin();
-    PVOID func = DetourFindFunction("Kernel32.dll", "CreateEventA");
+    DetourUpdateThread(GetCurrentThread());
+
+    //PVOID func = DetourFindFunction("Kernel32.dll", "CreateEventA");
 
     DetourDetach(&(PVOID&)func, (PVOID)hook_CreateEventA);
 
     err = DetourTransactionCommit();
-
-    printf("funzione un-hookata\n");
+    
+    printf("funzione un-hookata con risultato %d\n", err);
 
     return TRUE;
 
