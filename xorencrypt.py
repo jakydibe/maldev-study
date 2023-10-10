@@ -5,7 +5,7 @@ text = text.hex()
 
 
 hex_string = text
-key = "chiaramioamo"
+key = "testkey"
 
 # Convert the hexadecimal string to bytes
 hex_bytes = bytes.fromhex(hex_string)
